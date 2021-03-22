@@ -29,11 +29,6 @@ const markup = gallery.map(({ preview, original, description }) => {
 
 refs.gallery.insertAdjacentHTML('beforeend', markup.join(''))
 
-const changeParameters = e => {
-    refs.lightboxImage.src = e.target.dataset.source;
-    refs.lightbox.alt = e.target.alt
-}
-
 refs.gallery.addEventListener('click', onOpenModal)
 
 function onOpenModal(e) {
@@ -42,14 +37,16 @@ function onOpenModal(e) {
         return;
     }
     refs.lightbox.classList.add('is-open')
-    changeParameters(e);
+    refs.lightboxImage.src = e.target.dataset.source;
+    refs.lightbox.alt = e.target.alt;
 }
 
 refs.button.addEventListener('click', onCloseModal)
 
 function onCloseModal() {
     refs.lightbox.classList.remove('is-open');
-    changeParameters(e);
+    refs.lightboxImage.src = '';
+    refs.lightbox.alt = '';
 }
 
 refs.overlay.addEventListener('click', onCloseModal);
