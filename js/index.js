@@ -29,6 +29,11 @@ const markup = gallery.map(({ preview, original, description }) => {
 
 refs.gallery.insertAdjacentHTML('beforeend', markup.join(''))
 
+const changeParameters = e => {
+    refs.lightboxImage.src = e.target.dataset.source;
+    refs.lightbox.alt = e.target.alt
+}
+
 refs.gallery.addEventListener('click', onOpenModal)
 
 function onOpenModal(e) {
@@ -37,18 +42,18 @@ function onOpenModal(e) {
         return;
     }
     refs.lightbox.classList.add('is-open')
-    refs.lightboxImage.src = e.target.dataset.source;
-    refs.lightbox.alt = e.target.alt;
+    changeParameters(e);
 }
 
 refs.button.addEventListener('click', onCloseModal)
 
 function onCloseModal() {
     refs.lightbox.classList.remove('is-open');
-
+    changeParameters(e);
 }
 
 refs.overlay.addEventListener('click', onCloseModal);
+
 window.addEventListener('keydown', (e) => {
     if(e.key !== 'Escape') {
     return;
