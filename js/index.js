@@ -9,7 +9,7 @@ overlay: document.querySelector('.lightbox__overlay'),
 
 }
 
-const markup = gallery.map(({ preview, original, description }) => {
+const markup = gallery.map(({ preview, original, description }, index) => {
     return `
     <li class="gallery__item">
   <a
@@ -21,6 +21,7 @@ const markup = gallery.map(({ preview, original, description }) => {
       src="${preview}"
       data-source="${original}"
       alt="${description}"
+      data-index="${index}"
     />
   </a>
 </li>
@@ -39,6 +40,7 @@ function onOpenModal(e) {
     refs.lightbox.classList.add('is-open')
     refs.lightboxImage.src = e.target.dataset.source;
     refs.lightbox.alt = e.target.alt;
+  refs.lightboxImage.dataset.index = e.target.dataset.index;
 }
 
 refs.button.addEventListener('click', onCloseModal)
@@ -56,4 +58,36 @@ window.addEventListener('keydown', (e) => {
     return;
     }
     onCloseModal();
+});
+
+function setNewSrc(index, step = 0) {
+  refs.lightboxImage.dataset.index = `${index + step}`;
+  refs.lightboxImage.src = gallery[index + step].original;
+}
+
+function arrowLeft(){
+  let index = Number(refs.lightboxImage.dataset.index);
+  if (index === 0) {
+    setNewSrc(gallery.length - 1);
+    return;
+  }
+  setNewSrc(index, -1);
+}
+
+function arrowRight(){
+  let index = Number(refs.lightboxImage.dataset.index);
+  if (index === gallery.length - 1) {
+    setNewSrc(0);
+    return;
+  }
+  setNewSrc(index, 1);
+}
+
+window.addEventListener('keydown', e => {
+  if (e.code === 'ArrowLeft') {
+    arrowLeft();
+  }
+  if (e.code === 'ArrowRight') {
+    arrowRight();
+  }
 });
